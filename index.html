@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlexPay Global — Brand Management & Content Hub</title>
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Plus Jakarta Sans"', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            flexBlue: 'var(--color-primary)',
+            flexNavy: 'var(--color-navy)',
+            flexGreen: 'var(--color-accent)',
+            flexBg: 'var(--color-surface)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --color-primary: #0052FF;
+      --color-navy: #0A1931;
+      --color-accent: #00D084;
+      --color-surface: #F4F6F9;
+      --color-text: #334155;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--color-text);
+      background-color: var(--color-surface);
+      scroll-behavior: smooth;
+    }
+
+    h1, h2, h3, h4, .font-display {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Estilos del Modo Edición */
+    body.edit-mode [data-editable="true"] {
+      outline: 2px dashed rgba(0, 82, 255, 0.35);
+      outline-offset: 3px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      cursor: text;
+    }
+
+    body.edit-mode [data-editable="true"]:hover {
+      outline: 2px dashed var(--color-primary);
+      background-color: rgba(0, 82, 255, 0.04);
+    }
+
+    body.edit-mode [data-editable="true"]:focus {
+      outline: 2px solid var(--color-accent);
+      background-color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Modo Presentación por Slides */
+    body.slide-mode .brand-section {
+      display: none;
+    }
+    body.slide-mode .brand-section.active-slide {
+      display: block;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Impresión / PDF */
+    @media print {
+      .no-print { display: none !important; }
+      .main-content { margin-left: 0 !important; padding: 0 !important; }
+      .brand-section {
+        display: block !important;
+        page-break-inside: avoid;
+        margin-bottom: 2rem;
+        box-shadow: none !important;
+        border: 1px solid #e2e8f0;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row">
+
+  <!-- NOTIFICACIÓN FLOTANTE (TOAST) -->
+  <div id="toast" class="no-print fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg border border-white/10 items-center gap-2">
+    <span class="text-emerald-400">✓</span> <span id="toast-msg">Copiado al portapapeles</span>
+  </div>
+
+  <!-- BARRA LATERAL DE NAVEGACIÓN -->
+  <aside class="no-print w-full lg:w-72 bg-[#0A1931] text-white lg:fixed lg:inset-y-0 lg:left-0 z-30 flex flex-col justify-between shadow-xl">
+    <div>
+      <!-- Logo Cabecera -->
+      <div class="p-6 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[var(--color-primary)] flex items-center justify-center font-display font-extrabold text-xl text-white shadow-md">
+            F
+          </div>
+          <div>
+            <span class="font-display font-bold text-lg tracking-tight block leading-none" data-editable="true">FlexPay</span>
+            <span class="text-xs text-emerald-400 font-medium tracking-wider uppercase" data-editable="true">Brand & Content Hub</span>
+          </div>
+        </div>
+        <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-slate-300">v2.0</span>
+      </div>
+
+      <!-- Menú de Secciones -->
+      <nav class="p-4 space-y-1 overflow-y-auto max-h-[calc(100vh-180px)] text-sm">
+        <p class="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">ADN Estratégico</p>
+        <a href="#sec-pilares" onclick="goToSection(0)" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 text-white font-medium transition">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Pilares de Marca
+        </a>
+
+        <p class="px-3 pt-4 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Estructura del Manual</p>
+        <a href="#sec-1" onclick="goToSection(1)" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <span class="text-xs text-slate-400 font-mono">01</span> Introducción e Historia
+        </a>
+        <a href="#sec-2" onclick="goToSection(2)" class="nav-item flex items-center justify-between px-3 py-2 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <div class="flex items-center gap-3"><span class="text-xs text-slate-400 font-mono">02</span> Identidad Verbal</div>
+          <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded">+Frases</span>
+        </a>
+        <a href="#sec-3" onclick="goToSection(3)" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <span class="text-xs text-slate-400 font-mono">03</span> Uso del Logotipo
+        </a>
+        <a href="#sec-4" onclick="goToSection(4)" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <span class="text-xs text-slate-400 font-mono">04</span> Paleta Cromática
+        </a>
+        <a href="#sec-5" onclick="goToSection(5)" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <span class="text-xs text-slate-400 font-mono">05</span> Tipografía
+        </a>
+        <a href="#sec-6" onclick="goToSection(6)" class="nav-item flex items-center justify-between px-3 py-2 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <div class="flex items-center gap-3"><span class="text-xs text-slate-400 font-mono">06</span> Estilo y Guiones</div>
+          <span class="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded">Guiones</span>
+        </a>
+        <a href="#sec-7" onclick="goToSection(7)" class="nav-item flex items-center justify-between px-3 py-2 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <div class="flex items-center gap-3"><span class="text-xs text-slate-400 font-mono">07</span> Aplicaciones y Simulador</div>
+          <span class="text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">Calc</span>
+        </a>
+
+        <p class="px-3 pt-4 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Implementación</p>
+        <a href="#sec-fases" onclick="goToSection(8)" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <span class="w-2 h-2 rounded-full bg-blue-400"></span> Hoja de Ruta (5 Fases)
+        </a>
+      </nav>
+    </div>
+
+    <!-- Pie de Sidebar -->
+    <div class="p-4 border-t border-white/10 text-xs text-slate-400 flex items-center justify-between">
+      <span>Estrategia por <strong class="text-white">Venxel</strong></span>
+      <button onclick="resetSavedData()" class="text-[11px] underline hover:text-rose-400" title="Restaurar valores originales">Restaurar</button>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="main-content flex-1 lg:ml-72 flex flex-col min-h-screen">
+
+    <!-- BARRA DE HERRAMIENTAS SUPERIOR (TOOLBAR) -->
+    <header class="no-print sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-slate-200 px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+          <span class="w-2 h-2 rounded-full bg-slate-400" id="status-dot"></span>
+          <span id="status-text">Modo Lectura</span>
+        </span>
+
+        <!-- Conmutador Vista Scroll vs Presentación (Diapositivas) -->
+        <button onclick="toggleSlideMode()" class="px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 hover:bg-slate-50 text-slate-700 transition flex items-center gap-1.5">
+          <span>🖥️</span> <span id="view-mode-label">Vista Presentación (Slides)</span>
+        </button>
+      </div>
+
+      <!-- Controles de Edición y Exportación -->
+      <div class="flex items-center gap-2">
+        <button id="btn-edit" onclick="toggleEditMode()" class="px-4 py-2 rounded-lg text-xs font-semibold bg-[var(--color-primary)] text-white hover:opacity-95 transition shadow-sm flex items-center gap-2">
+          <span>✏️</span> <span id="edit-btn-label">Activar Modo Edición</span>
+        </button>
+
+        <button onclick="downloadUpdatedHTML()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-sm flex items-center gap-1.5" title="Descarga este archivo HTML con todos tus cambios integrados">
+          <span>💾</span> Guardar HTML
+        </button>
+
+        <button onclick="window.print()" class="px-3 py-2 rounded-lg text-xs font-medium border border-slate-200 hover:bg-slate-50 text-slate-700 transition" title="Imprimir o guardar como PDF">
+          📄 PDF
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTROLES DE NAVEGACIÓN MODO SLIDES -->
+    <div id="slide-controls" class="no-print hidden bg-slate-900 text-white px-6 py-2.5 items-center justify-between text-xs">
+      <button onclick="changeSlide(-1)" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded font-medium">← Anterior</button>
+      <span id="slide-indicator" class="font-mono text-slate-300">Diapositiva 1 / 9</span>
+      <button onclick="changeSlide(1)" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded font-semibold">Siguiente →</button>
+    </div>
+
+    <!-- ÁREA DE DOCUMENTO / DIAPOSITIVAS -->
+    <main id="document-container" class="p-6 md:p-10 max-w-6xl mx-auto w-full space-y-10 flex-1">
+
+      <!-- ==========================================
+           SECCIÓN 0: PORTADA Y PILARES DE MARCA
+           ========================================== -->
+      <section id="sec-pilares" class="brand-section active-slide space-y-8">
+        <div class="rounded-3xl bg-gradient-to-br from-[#0A1931] via-[#0d2347] to-[var(--color-primary)] text-white p-8 md:p-12 shadow-lg relative overflow-hidden">
+          <div class="relative z-10 max-w-3xl space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-semibold tracking-wide uppercase" data-editable="true">
+              Sistema de Gestión de Marca • The FlexPay Way
+            </div>
+            <h1 class="font-display text-3xl md:text-5xl font-extrabold tracking-tight leading-tight" data-editable="true">
+              Manual de Brand Management: FlexPay Global
+            </h1>
+            <p class="text-slate-200 text-base md:text-lg leading-relaxed" data-editable="true">
+              "FlexPay es un aliado cercano, confiable y flexible que facilita las compras y apoya el crecimiento de sus comercios aliados."
+            </p>
+          </div>
+        </div>
+
+        <!-- Los 5 Pilares -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200/80 space-y-6">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-[var(--color-primary)]">Bloque I</span>
+              <h2 class="font-display text-2xl font-bold text-slate-900" data-editable="true">Pilares Estratégicos de la Marca</h2>
+            </div>
+            <span class="text-xs text-slate-400">Activa el Modo Edición arriba para personalizar cualquier texto</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="p-5 rounded-xl bg-slate-50 border border-slate-200/70 space-y-2">
+              <div class="w-8 h-8 rounded-lg bg-blue-100 text-[var(--color-primary)] flex items-center justify-center font-bold text-sm">01</div>
+              <h3 class="font-display font-bold text-slate-900 text-lg" data-editable="true">Propósito</h3>
+              <p class="text-xs text-slate-500 font-medium" data-editable="true">La razón de ser más allá de la venta</p>
+              <p class="text-sm text-slate-700 leading-relaxed" data-editable="true">
+                Democratizar el acceso a la tecnología móvil y al crecimiento comercial en Venezuela. <em>"No vendemos un teléfono; abrimos oportunidades para conectar, aprender y trabajar"</em> sin poner en riesgo la estabilidad económica del cliente.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-xl bg-slate-50 border border-slate-200/70 space-y-2">
+              <div class="w-8 h-8 rounded-lg bg-blue-100 text-[var(--color-primary)] flex items-center justify-center font-bold text-sm">02</div>
+              <h3 class="font-display font-bold text-slate-900 text-lg" data-editable="true">Posicionamiento</h3>
+              <p class="text-xs text-slate-500 font-medium" data-editable="true">El atributo único frente a la competencia</p>
+              <p class="text-sm text-slate-700 leading-relaxed" data-editable="true">
+                El aliado cercano, transparente y humano en compras a plazos (BNPL) y tecnología crediticia. Destaca por atención personalizada de expertos en tiendas físicas, transparencia radical (sin letra pequeña) y escucha activa (<em>"Estamos escuchando"</em>).
+              </p>
+            </div>
+
+            <div class="p-5 rounded-xl bg-slate-50 border border-slate-200/70 space-y-2">
+              <div class="w-8 h-8 rounded-lg bg-blue-100 text-[var(--color-primary)] flex items-center justify-center font-bold text-sm">03</div>
+              <h3 class="font-display font-bold text-slate-900 text-lg" data-editable="true">Propuesta de Valor</h3>
+              <p class="text-xs text-slate-500 font-medium" data-editable="true">La promesa clara para B2C y B2B</p>
+              <p class="text-sm text-slate-700 leading-relaxed" data-editable="true">
+                <strong>B2C:</strong> Adquiere tu equipo con cuotas claras (Inicial + 7 cuotas = Total) y gestiona tu contrato activo desde la App.<br>
+                <strong>B2B / SaaS:</strong> Vende más a crédito apalancándote en el capital de FlexPay o en nuestro sistema LMS y Core Financiero.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-xl bg-slate-50 border border-slate-200/70 space-y-2">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">04</div>
+              <h3 class="font-display font-bold text-slate-900 text-lg" data-editable="true">Personalidad y Voz</h3>
+              <p class="text-xs text-slate-500 font-medium" data-editable="true">Tono, lenguaje y carácter</p>
+              <p class="text-sm text-slate-700 leading-relaxed" data-editable="true">
+                <strong>Rasgos:</strong> Innovador, Experimentado, Creativo, Divertido, Profesional e Informal. Personalidad fuerte, empática y conectada con el gentilicio y los valores del venezolano trabajador.
+              </p>
+            </div>
+
+            <div class="p-5 rounded-xl bg-slate-50 border border-slate-200/70 space-y-2 md:col-span-2">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">05</div>
+              <h3 class="font-display font-bold text-slate-900 text-lg" data-editable="true">Consistencia (Filosofía "The FlexPay Way")</h3>
+              <p class="text-xs text-slate-500 font-medium" data-editable="true">Uniformidad visual, verbal y operativa</p>
+              <p class="text-sm text-slate-700 leading-relaxed" data-editable="true">
+                Sustentada en la <strong>Metodología 5S</strong> (orden físico y digital), mejora continua <strong>Kaizen</strong> y procesos <strong>ISO 9001</strong>. Todo lo interno se refleja hacia el exterior: mantener la misma línea gráfica de la aplicación móvil, atención al detalle y autenticidad (evitando contenido genérico o dependiente en exceso de plantillas/IA).
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN 1: INTRODUCCIÓN E HISTORIA
+           ========================================== -->
+      <section id="sec-1" class="brand-section bg-white rounded-2xl p-8 shadow-sm border border-slate-200/80 space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--color-primary)]">01 • Estructura del Manual</span>
+          <h2 class="font-display text-2xl font-bold text-slate-900" data-editable="true">1. Introducción e Historia: Origen, Misión, Visión y Valores</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200/60 space-y-2">
+            <h3 class="font-display font-bold text-slate-900" data-editable="true">Origen y Modelo Triple</h3>
+            <p class="text-sm text-slate-600 leading-relaxed" data-editable="true">
+              FlexPay representa una evolución en las compañías Fintech en Venezuela, sustentada 100% en la confianza mutua. Opera bajo 3 líneas: <strong>1) BNPL</strong> en tiendas aliadas (ciclo de relación promedio de 3.5 meses), <strong>2) Retail Tiendas Propias FlexPay</strong> con expertos en tienda, y <strong>3) SaaS (Self-Lending)</strong> para comercios de cualquier rubro.
+            </p>
+          </div>
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200/60 space-y-2">
+            <h3 class="font-display font-bold text-slate-900" data-editable="true">Misión</h3>
+            <p class="text-sm text-slate-600 leading-relaxed" data-editable="true">
+              Ayudar a las personas a adquirir lo que necesitan sin poner en riesgo su estabilidad económica mediante planes de pago claros, viables y responsables; apoyando al mismo tiempo a minoristas y aliados para crecer juntos.
+            </p>
+          </div>
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200/60 space-y-2">
+            <h3 class="font-display font-bold text-slate-900" data-editable="true">Visión</h3>
+            <p class="text-sm text-slate-600 leading-relaxed" data-editable="true">
+              Ser la plataforma líder y referente de crédito accesible y tecnología financiera en Venezuela, reconocida por su cercanía al cliente, transparencia total y excelencia operativa.
+            </p>
+          </div>
+        </div>
+
+        <!-- Valores Corporativos -->
+        <div class="space-y-3 pt-2">
+          <h3 class="font-display font-bold text-slate-900 text-lg" data-editable="true">Valores Corporativos (Comportamientos Observables)</h3>
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+              <span class="text-xs font-bold text-[var(--color-primary)]">VALOR 01</span>
+              <h4 class="font-display font-bold text-sm text-slate-900" data-editable="true">Empatía que cuida</h4>
+              <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">La persona viene primero. Escuchamos sin juzgar, explicamos en lenguaje simple y cerramos acuerdos claros (fecha, monto y medio) con respeto.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+              <span class="text-xs font-bold text-[var(--color-primary)]">VALOR 02</span>
+              <h4 class="font-display font-bold text-sm text-slate-900" data-editable="true">Integridad radical</h4>
+              <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">Transparencia total sin letra pequeña. Explicamos tasas y ajustes con claridad (Inicial + 7 cuotas = Total). Si nos equivocamos, corregimos rápido.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+              <span class="text-xs font-bold text-[var(--color-primary)]">VALOR 03</span>
+              <h4 class="font-display font-bold text-sm text-slate-900" data-editable="true">Innovación con propósito</h4>
+              <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">Aplicamos lo que hace la vida más simple y justa. Usamos datos y nuestra plataforma combinados con el criterio humano profesional.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+              <span class="text-xs font-bold text-[var(--color-primary)]">VALOR 04</span>
+              <h4 class="font-display font-bold text-sm text-slate-900" data-editable="true">Resiliencia con esperanza</h4>
+              <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">Nos adaptamos a la volatilidad sin perder la calma ni la ética. Sostenemos al equipo y a nuestros aliados en momentos difíciles.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+              <span class="text-xs font-bold text-[var(--color-primary)]">VALOR 05</span>
+              <h4 class="font-display font-bold text-sm text-slate-900" data-editable="true">Empoderamiento</h4>
+              <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">Abrimos oportunidades para conectar, aprender y trabajar. Educamos al cliente con información clara y celebramos sus avances.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN 2: IDENTIDAD VERBAL + BANCO DE FRASES Y CONTENIDO
+           ========================================== -->
+      <section id="sec-2" class="brand-section bg-white rounded-2xl p-8 shadow-sm border border-slate-200/80 space-y-8">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--color-primary)]">02 • Estructura del Manual</span>
+          <h2 class="font-display text-2xl font-bold text-slate-900" data-editable="true">2. Identidad Verbal, Frases Sugeridas y Pilares de Contenido</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-5 rounded-xl bg-blue-50/60 border border-blue-200/60 space-y-2">
+            <span class="text-xs font-bold uppercase text-[var(--color-primary)]">Concepto Paraguas de Campaña</span>
+            <h3 class="font-display text-xl font-extrabold text-slate-900" data-editable="true">"Plan: Venezuela, te estamos escuchando"</h3>
+            <p class="text-sm text-slate-700 leading-relaxed" data-editable="true">
+              Posiciona a FlexPay como una empresa que escucha activamente al venezolano y trabaja todos los días para mejorar no solo las facilidades de pago (menor inicial, más cuotas), sino toda la experiencia: app y atención en tienda.
+            </p>
+          </div>
+          <div class="p-5 rounded-xl bg-amber-50/70 border border-amber-200/80 space-y-2">
+            <span class="text-xs font-bold uppercase text-amber-800">Regla de Oro Comunicacional</span>
+            <h3 class="font-display text-xl font-bold text-slate-900" data-editable="true">Claridad sobre el uso de la App</h3>
+            <p class="text-sm text-slate-700 leading-relaxed" data-editable="true">
+              Toda pieza sobre la aplicación móvil debe aclarar que <strong>está dirigida a usuarios que ya tienen contrato activo</strong> (iniciado en tiendas propias o comercios aliados), evitando frustraciones en el consumidor general.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tabla de Terminología -->
+        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                <th class="p-3.5 font-display font-bold">❌ Término Prohibido / Evitar</th>
+                <th class="p-3.5 font-display font-bold">✅ Término Permitido (FlexPay Way)</th>
+                <th class="p-3.5 font-display font-bold">Razón Estratégica</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr>
+                <td class="p-3.5 font-semibold text-rose-600" data-editable="true">Financiamiento</td>
+                <td class="p-3.5 font-semibold text-emerald-700" data-editable="true">Crédito / Compra a plazos / Facilidad de pago / Cuotas</td>
+                <td class="p-3.5 text-slate-600" data-editable="true">"Financiamiento" suena burocrático o bancario y genera resistencia en el consumidor.</td>
+              </tr>
+              <tr>
+                <td class="p-3.5 font-semibold text-rose-600" data-editable="true">Sujeto de crédito / Deudor</td>
+                <td class="p-3.5 font-semibold text-emerald-700" data-editable="true">Cliente / Persona / Usuario con contrato</td>
+                <td class="p-3.5 text-slate-600" data-editable="true">Refuerza la cercanía en tienda y el valor de "Empatía que cuida".</td>
+              </tr>
+              <tr>
+                <td class="p-3.5 font-semibold text-rose-600" data-editable="true">Aplican condiciones ocultas</td>
+                <td class="p-3.5 font-semibold text-emerald-700" data-editable="true">Inicial + 7 cuotas = Total (Sin letra pequeña)</td>
+                <td class="p-3.5 text-slate-600" data-editable="true">Demuestra Integridad Radical y claridad matemática desde el primer contacto.</td>
+              </tr>
+              <tr>
+                <td class="p-3.5 font-semibold text-rose-600" data-editable="true">Comercio afiliado</td>
+                <td class="p-3.5 font-semibold text-emerald-700" data-editable="true">Comercio Aliado / Tienda Aliada</td>
+                <td class="p-3.5 text-slate-600" data-editable="true">Transmite acompañamiento y crecimiento mutuo B2B.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- NUEVO BLOQUE INTERACTIVO: LABORATORIO DE FRASES Y SUGERENCIAS DE CONTENIDO -->
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-5">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Laboratorio Verbal Interactivo</span>
+              <h3 class="font-display text-xl font-bold text-slate-900" data-editable="true">Banco de Frases, Copys y Sugerencias de Contenido</h3>
+              <p class="text-xs text-slate-500" data-editable="true">Explora ideas por pilar comunicacional, edítalas o agrega nuevas sugerencias para el equipo.</p>
+            </div>
+            <button onclick="addNewCopyCard()" class="no-print px-3.5 py-2 rounded-xl text-xs font-semibold bg-[var(--color-primary)] text-white hover:opacity-95 transition shadow-sm self-start md:self-auto">
+              + Añadir Frase / Idea de Contenido
+            </button>
+          </div>
+
+          <!-- Filtros de Categoría -->
+          <div class="no-print flex flex-wrap gap-2 pt-1">
+            <button onclick="filterCopy('all')" class="copy-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#0A1931] text-white">Todas las categorías</button>
+            <button onclick="filterCopy('escucha')" class="copy-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-100">🇻🇪 Campaña "Estamos Escuchando"</button>
+            <button onclick="filterCopy('b2c')" class="copy-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-100">📱 Claridad B2C & Uso de App</button>
+            <button onclick="filterCopy('b2b')" class="copy-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-100">🤝 Captación Tiendas Aliadas (B2B)</button>
+          </div>
+
+          <!-- Grid de Tarjetas de Contenido y Frases -->
+          <div id="copy-bank-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Tarjeta 1: Escucha Activa -->
+            <div data-cat="escucha" class="copy-card p-5 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between space-y-3">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-blue-100 text-[var(--color-primary)]" data-editable="true">Campaña: Estamos Escuchando</span>
+                  <button onclick="copyCardText(this)" class="no-print text-xs text-slate-400 hover:text-slate-700" title="Copiar frase">📋 Copiar</button>
+                </div>
+                <p class="copy-quote font-display font-bold text-slate-900 text-base leading-snug" data-editable="true">
+                  "Venezuela, te estamos escuchando: bajamos la fricción, aclaramos las cuentas y mejoramos cada día en tienda y en la app para estar a tu altura."
+                </p>
+                <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">
+                  <strong>Sugerencia de contenido (Reel / Carrusel):</strong> Mostrar comentarios reales de clientes pidiendo mejoras (atención, dudas sobre cuotas o app) y a un miembro real del equipo FlexPay mostrando cómo se implementó esa mejora.
+                </p>
+              </div>
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                <span data-editable="true">Formato: Reel Humano / Manifiesto</span>
+                <span data-editable="true">Objetivo: Confianza y Cercanía</span>
+              </div>
+            </div>
+
+            <!-- Tarjeta 2: Claridad Matemática B2C -->
+            <div data-cat="b2c" class="copy-card p-5 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between space-y-3">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800" data-editable="true">Transparencia B2C • Sin Letra Pequeña</span>
+                  <button onclick="copyCardText(this)" class="no-print text-xs text-slate-400 hover:text-slate-700" title="Copiar frase">📋 Copiar</button>
+                </div>
+                <p class="copy-quote font-display font-bold text-slate-900 text-base leading-snug" data-editable="true">
+                  "Cuentas claras conservan la confianza: Inicial + 7 cuotas exactas = Tu teléfono nuevo. Sin letras chiquitas ni sorpresas a mitad de camino."
+                </p>
+                <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">
+                  <strong>Sugerencia de contenido (Post Gráfico / Carrusel):</strong> Desglose visual ultra limpio comparando la tranquilidad de saber exactamente cuánto pagas en cada cuota frente al estrés de cargos ocultos.
+                </p>
+              </div>
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                <span data-editable="true">Formato: Carrusel Educativo</span>
+                <span data-editable="true">Valor: Integridad Radical</span>
+              </div>
+            </div>
+
+            <!-- Tarjeta 3: Rol de la App -->
+            <div data-cat="b2c" class="copy-card p-5 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between space-y-3">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800" data-editable="true">Educación de Producto • App</span>
+                  <button onclick="copyCardText(this)" class="no-print text-xs text-slate-400 hover:text-slate-700" title="Copiar frase">📋 Copiar</button>
+                </div>
+                <p class="copy-quote font-display font-bold text-slate-900 text-base leading-snug" data-editable="true">
+                  "Tu crédito nace en nuestras tiendas con atención cara a cara; tu tranquilidad continúa en la App FlexPay para que lleves el control de tu contrato activo."
+                </p>
+                <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">
+                  <strong>Sugerencia de contenido (Story / Tutorial en Tienda):</strong> Asesor en mostrador entregando el equipo al cliente y mostrándole cómo ingresar a la App con su contrato ya activo para revisar sus fechas de pago.
+                </p>
+              </div>
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                <span data-editable="true">Formato: Video Tutorial 30s</span>
+                <span data-editable="true">Objetivo: Evitar confusión de registro</span>
+              </div>
+            </div>
+
+            <!-- Tarjeta 4: Captación B2B Comercios Aliados -->
+            <div data-cat="b2b" class="copy-card p-5 rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between space-y-3">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800" data-editable="true">Captación B2B • Tiendas Aliadas</span>
+                  <button onclick="copyCardText(this)" class="no-print text-xs text-slate-400 hover:text-slate-700" title="Copiar frase">📋 Copiar</button>
+                </div>
+                <p class="copy-quote font-display font-bold text-slate-900 text-base leading-snug" data-editable="true">
+                  "Que ningún cliente salga de tu tienda con las manos vacías. Súmate como Comercio Aliado FlexPay y convierte las visitas de hoy en ventas a crédito seguras."
+                </p>
+                <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">
+                  <strong>Sugerencia de contenido (Anuncio Meta Ads B2B / Testimonial):</strong> Dueño o encargado de tienda aliada contando cómo aumentó su rotación de inventario y cómo el acompañamiento de FlexPay impulsa su negocio.
+                </p>
+              </div>
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                <span data-editable="true">Formato: Meta Ads B2B / LinkedIn</span>
+                <span data-editable="true">Objetivo: Sumar Comercios Aliados</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN 3: USO DEL LOGOTIPO
+           ========================================== -->
+      <section id="sec-3" class="brand-section bg-white rounded-2xl p-8 shadow-sm border border-slate-200/80 space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--color-primary)]">03 • Estructura del Manual</span>
+          <h2 class="font-display text-2xl font-bold text-slate-900" data-editable="true">3. Uso del Logotipo</h2>
+          <p class="text-sm text-slate-500 mt-1" data-editable="true">Directriz mandatoria: El logotipo en todas las piezas debe ser exactamente igual al de la aplicación móvil oficial.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="border border-slate-200 rounded-xl p-6 flex flex-col items-center justify-between bg-slate-50/50 space-y-4">
+            <div class="h-28 flex items-center justify-center">
+              <div class="flex items-center gap-3 px-5 py-3 rounded-2xl border border-dashed border-blue-400 bg-white shadow-sm">
+                <div class="w-10 h-10 rounded-xl bg-[var(--color-primary)] flex items-center justify-center text-white font-display font-extrabold text-xl">F</div>
+                <span class="font-display font-extrabold text-2xl text-[#0A1931] tracking-tight">Flex<span class="text-[var(--color-primary)]">Pay</span></span>
+              </div>
+            </div>
+            <div class="text-center">
+              <h4 class="font-display font-bold text-sm text-slate-900" data-editable="true">Versión Principal (Horizontal)</h4>
+              <p class="text-xs text-slate-500 mt-0.5" data-editable="true">Cabeceras web, fachadas Retail y presentaciones B2B.</p>
+            </div>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl p-6 flex flex-col items-center justify-between bg-slate-50/50 space-y-4">
+            <div class="h-28 flex items-center justify-center">
+              <div class="flex flex-col items-center gap-1.5 px-6 py-3 rounded-2xl border border-dashed border-blue-400 bg-white shadow-sm">
+                <div class="w-10 h-10 rounded-xl bg-[var(--color-primary)] flex items-center justify-center text-white font-display font-extrabold text-xl">F</div>
+                <span class="font-display font-extrabold text-lg text-[#0A1931] tracking-tight">Flex<span class="text-[var(--color-primary)]">Pay</span></span>
+              </div>
+            </div>
+            <div class="text-center">
+              <h4 class="font-display font-bold text-sm text-slate-900" data-editable="true">Versión Secundaria (Vertical)</h4>
+              <p class="text-xs text-slate-500 mt-0.5" data-editable="true">Habladores de mostrador (POS), credenciales y formatos centrados.</p>
+            </div>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl p-6 flex flex-col items-center justify-between bg-slate-50/50 space-y-4">
+            <div class="h-28 flex items-center justify-center">
+              <div class="w-16 h-16 rounded-2xl bg-[var(--color-primary)] flex items-center justify-center text-white font-display font-extrabold text-3xl shadow-md ring-4 ring-blue-100">
+                F
+              </div>
+            </div>
+            <div class="text-center">
+              <h4 class="font-display font-bold text-sm text-slate-900" data-editable="true">Isotipo Oficial (App Icon)</h4>
+              <p class="text-xs text-slate-500 mt-0.5" data-editable="true">Idéntico al ícono de la App, perfil de redes y sellos en tienda.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <h4 class="font-display font-bold text-slate-900 text-sm" data-editable="true">Área de Respeto y Tamaños Mínimos</h4>
+            <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4" data-editable="true">
+              <li><strong>Área de respeto:</strong> Margen libre equivalente a la altura del módulo "F" alrededor de los 4 lados del logotipo.</li>
+              <li><strong>Tamaño mínimo Digital:</strong> <code>100 px</code> de ancho (Horizontal) / <code>32 px</code> (Isotipo).</li>
+              <li><strong>Tamaño mínimo Impreso:</strong> <code>25 mm</code> de ancho en papelería, stickers de tienda aliada y material POP.</li>
+            </ul>
+          </div>
+          <div class="p-5 rounded-xl bg-rose-50/60 border border-rose-200 space-y-2">
+            <h4 class="font-display font-bold text-rose-900 text-sm" data-editable="true">🚫 Usos Incorrectos del Logotipo</h4>
+            <ul class="text-xs text-rose-800 space-y-2 list-disc pl-4" data-editable="true">
+              <li>No usar versiones de logo distintas a la que muestra actualmente la aplicación móvil.</li>
+              <li>No deformar proporciones, no inclinar y no cambiar las tipografías del logotipo.</li>
+              <li>No alterar los colores de la guía visual ni colocar sobre fondos sin contraste legible.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN 4: PALETA CROMÁTICA (INTERACTIVA)
+           ========================================== -->
+      <section id="sec-4" class="brand-section bg-white rounded-2xl p-8 shadow-sm border border-slate-200/80 space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-[var(--color-primary)]">04 • Estructura del Manual</span>
+            <h2 class="font-display text-2xl font-bold text-slate-900" data-editable="true">4. Paleta Cromática Oficial</h2>
+          </div>
+          <span class="no-print text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-medium">🎨 Selector interactivo para ajustar códigos de la guía visual</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="rounded-2xl border border-slate-200 overflow-hidden shadow-sm bg-white">
+            <div class="h-28 bg-[var(--color-primary)] p-3 flex justify-end items-start">
+              <input type="color" value="#0052FF" oninput="updateBrandColor('--color-primary', this.value, 'hex-primary', 'rgb-primary')" class="no-print w-7 h-7 rounded cursor-pointer border-0 bg-transparent" />
+            </div>
+            <div class="p-4 space-y-1.5 text-xs">
+              <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold text-[10px]">PRINCIPAL</span>
+              <h4 class="font-display font-bold text-base text-slate-900" data-editable="true">Azul FlexPay</h4>
+              <p class="font-mono text-slate-600">HEX: <strong id="hex-primary" data-editable="true">#0052FF</strong></p>
+              <p class="font-mono text-slate-600">RGB: <span id="rgb-primary" data-editable="true">0, 82, 255</span></p>
+              <p class="font-mono text-slate-600" data-editable="true">CMYK: 90, 68, 0, 0</p>
+              <p class="font-mono text-slate-600" data-editable="true">Pantone: PMS 2728 C</p>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 overflow-hidden shadow-sm bg-white">
+            <div class="h-28 bg-[var(--color-navy)] p-3 flex justify-end items-start">
+              <input type="color" value="#0A1931" oninput="updateBrandColor('--color-navy', this.value, 'hex-navy', 'rgb-navy')" class="no-print w-7 h-7 rounded cursor-pointer border-0 bg-transparent" />
+            </div>
+            <div class="p-4 space-y-1.5 text-xs">
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-semibold text-[10px]">PRINCIPAL B2B</span>
+              <h4 class="font-display font-bold text-base text-slate-900" data-editable="true">Navy Confianza</h4>
+              <p class="font-mono text-slate-600">HEX: <strong id="hex-navy" data-editable="true">#0A1931</strong></p>
+              <p class="font-mono text-slate-600">RGB: <span id="rgb-navy" data-editable="true">10, 25, 49</span></p>
+              <p class="font-mono text-slate-600" data-editable="true">CMYK: 95, 80, 45, 65</p>
+              <p class="font-mono text-slate-600" data-editable="true">Pantone: PMS 533 C</p>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 overflow-hidden shadow-sm bg-white">
+            <div class="h-28 bg-[var(--color-accent)] p-3 flex justify-end items-start">
+              <input type="color" value="#00D084" oninput="updateBrandColor('--color-accent', this.value, 'hex-accent', 'rgb-accent')" class="no-print w-7 h-7 rounded cursor-pointer border-0 bg-transparent" />
+            </div>
+            <div class="p-4 space-y-1.5 text-xs">
+              <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-semibold text-[10px]">SECUNDARIO / ACCIÓN</span>
+              <h4 class="font-display font-bold text-base text-slate-900" data-editable="true">Verde Aprobación</h4>
+              <p class="font-mono text-slate-600">HEX: <strong id="hex-accent" data-editable="true">#00D084</strong></p>
+              <p class="font-mono text-slate-600">RGB: <span id="rgb-accent" data-editable="true">0, 208, 132</span></p>
+              <p class="font-mono text-slate-600" data-editable="true">CMYK: 75, 0, 62, 0</p>
+              <p class="font-mono text-slate-600" data-editable="true">Pantone: PMS 3395 C</p>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 overflow-hidden shadow-sm bg-white">
+            <div class="h-28 bg-[#F4F6F9] border-b border-slate-200 p-3 flex justify-end items-start">
+              <input type="color" value="#F4F6F9" oninput="updateBrandColor('--color-surface', this.value, 'hex-surface', 'rgb-surface')" class="no-print w-7 h-7 rounded cursor-pointer border-0 bg-transparent" />
+            </div>
+            <div class="p-4 space-y-1.5 text-xs">
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold text-[10px]">NEUTRO / ORDEN 5S</span>
+              <h4 class="font-display font-bold text-base text-slate-900" data-editable="true">Gris Claridad UI</h4>
+              <p class="font-mono text-slate-600">HEX: <strong id="hex-surface" data-editable="true">#F4F6F9</strong></p>
+              <p class="font-mono text-slate-600">RGB: <span id="rgb-surface" data-editable="true">244, 246, 249</span></p>
+              <p class="font-mono text-slate-600" data-editable="true">CMYK: 4, 2, 1, 0</p>
+              <p class="font-mono text-slate-600" data-editable="true">Pantone: Cool Gray 1 C</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN 5: TIPOGRAFÍA
+           ========================================== -->
+      <section id="sec-5" class="brand-section bg-white rounded-2xl p-8 shadow-sm border border-slate-200/80 space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--color-primary)]">05 • Estructura del Manual</span>
+          <h2 class="font-display text-2xl font-bold text-slate-900" data-editable="true">5. Tipografía y Jerarquías Web</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-6 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <span class="text-xs font-bold text-[var(--color-primary)] uppercase">Tipografía Principal (Titulares y Marca)</span>
+            <p class="font-display text-4xl font-extrabold text-slate-900" data-editable="true">Plus Jakarta Sans</p>
+            <p class="font-display text-sm text-slate-600 tracking-wide" data-editable="true">ABCDEFGHIJKLMNOPQRSTUVWXYZ • abcdefghijklmnopqrstuvwxyz • 0123456789</p>
+            <p class="text-xs text-slate-500" data-editable="true">Pesos recomendados: SemiBold (600), Bold (700) y ExtraBold (800). Transmite cercanía, modernidad fintech y fuerza en campañas.</p>
+          </div>
+
+          <div class="p-6 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <span class="text-xs font-bold text-emerald-700 uppercase">Tipografía Secundaria (UI App, Contratos y Cuotas)</span>
+            <p class="font-sans text-4xl font-bold text-slate-900" data-editable="true">Inter (Tabular Nums)</p>
+            <p class="font-sans text-sm text-slate-600 tracking-wide tabular-nums" data-editable="true">Inicial $30.00 + 7 Cuotas de $15.00 = Total $135.00</p>
+            <p class="text-xs text-slate-500" data-editable="true">Pesos: Regular (400), Medium (500), SemiBold (600). Regla Web: Activar <code>font-variant-numeric: tabular-nums</code> en tablas de cuotas.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN 6: ESTILO VISUAL + GENERADOR DE GUIONES HUMANOS
+           ========================================== -->
+      <section id="sec-6" class="brand-section bg-white rounded-2xl p-8 shadow-sm border border-slate-200/80 space-y-8">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--color-primary)]">06 • Estructura del Manual</span>
+          <h2 class="font-display text-2xl font-bold text-slate-900" data-editable="true">6. Estilo Visual, Recursos y Guiones para Equipo Humano</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Permitidos -->
+          <div class="p-6 rounded-xl bg-emerald-50/60 border border-emerald-200 space-y-3">
+            <h3 class="font-display font-bold text-emerald-950 text-base flex items-center gap-2" data-editable="true">
+              ✅ Lo Permitido y Prioritario (Do's)
+            </h3>
+            <ul class="text-sm text-slate-700 space-y-2.5 list-disc pl-5" data-editable="true">
+              <li><strong>Contenido Humano del Equipo FlexPay:</strong> Fotos y videos reales de asesores en tiendas propias y comercios aliados atendiendo con cercanía.</li>
+              <li><strong>Consistencia de Línea Gráfica:</strong> Mantener una línea de diseño cohesiva y familiar (como hace Cashea en su categoría) que ayude a que la audiencia reconozca rápidamente a las tiendas aliadas.</li>
+              <li><strong>Visualización Clara de Datos:</strong> Desglose gráfico transparente de <code>Inicial + Cuotas = Total</code>.</li>
+              <li><strong>Combinación Equilibrada:</strong> Rostros humanos venezolanos acompañados de recursos vectoriales o ilustrados limpios que expliquen pasos de uso.</li>
+            </ul>
+          </div>
+
+          <!-- No Permitidos -->
+          <div class="p-6 rounded-xl bg-rose-50/60 border border-rose-200 space-y-3">
+            <h3 class="font-display font-bold text-rose-950 text-base flex items-center gap-2" data-editable="true">
+              ⚠️ Lo que NO Conviene Mostrar (Don'ts)
+            </h3>
+            <ul class="text-sm text-slate-700 space-y-2.5 list-disc pl-5" data-editable="true">
+              <li><strong>Cuidado con modelos específicos de teléfonos Android:</strong> Los modelos de teléfonos cambian rápidamente; evitar anclar artes permanentes a un dispositivo que se vea obsoleto pronto.</li>
+              <li><strong>Abuso de IA o Plantillas Genéricas:</strong> Por filosofía <em>FlexPay Way (Autenticidad)</em>, evitar imágenes plásticas o de stock extranjero que no conecten con el gentilicio venezolano.</li>
+              <li><strong>Estética Bancaria Fría:</strong> Evitar visuales burocráticos que contradigan la calidez y rapidez de la marca.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- NUEVO BLOQUE INTERACTIVO: GENERADOR Y MATRIZ DE GUIONES PARA EL EQUIPO FLEXPAY -->
+        <div class="p-6 rounded-2xl bg-[#0A1931] text-white space-y-5">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-white/10 pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Requerimientos Audiovisuales • Estándar ISO 9001</span>
+              <h3 class="font-display text-xl font-bold mt-0.5" data-editable="true">Guiones Estandarizados para Grabación con el Equipo FlexPay</h3>
+              <p class="text-xs text-slate-300 mt-1" data-editable="true">Guiones listos para enviar al equipo en tienda y grabar contenido humano genuino.</p>
+            </div>
+            <button onclick="addNewScriptCard()" class="no-print px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition shadow-sm self-start md:self-auto">
+              + Nuevo Guion de Grabación
+            </button>
+          </div>
+
+          <div id="scripts-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- Guion 1 -->
+            <div class="p-5 rounded-xl bg-white/5 border border-white/10 flex flex-col justify-between space-y-4">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300" data-editable="true">Guion 01 • Campaña Nacional</span>
+                  <button onclick="copyScriptText(this)" class="no-print text-xs text-slate-300 hover:text-white">📋 Copiar</button>
+                </div>
+                <h4 class="font-display font-bold text-base text-white" data-editable="true">"Venezuela, te estamos escuchando"</h4>
+                <div class="text-xs text-slate-200 space-y-2 leading-relaxed" data-editable="true">
+                  <p><strong class="text-emerald-300">🎥 Toma:</strong> Asesor FlexPay en mostrador de tienda ordenada (5S), mirando a cámara con sonrisa cercana.</p>
+                  <p><strong class="text-emerald-300">⚡ Gancho (0-3s):</strong> "¿Nos pediste cuotas más cómodas y una atención más rápida en tienda? Te estamos escuchando."</p>
+                  <p><strong class="text-emerald-300">💡 Desarrollo (3-15s):</strong> "En FlexPay leemos cada comentario. Por eso mejoramos nuestra app para que revises tu contrato al instante y preparamos a nuestros expertos en cada tienda para explicarte todo sin letra pequeña."</p>
+                  <p><strong class="text-emerald-300">🎯 Cierre / CTA:</strong> "Acércate a nuestras tiendas o comercios aliados y llévate el teléfono que necesitas hoy."</p>
+                </div>
+              </div>
+              <div class="pt-3 border-t border-white/10 text-[11px] text-slate-400 flex justify-between">
+                <span data-editable="true">Duración: 20-25 seg</span>
+                <span data-editable="true">Talento: Equipo Tienda</span>
+              </div>
+            </div>
+
+            <!-- Guion 2 -->
+            <div class="p-5 rounded-xl bg-white/5 border border-white/10 flex flex-col justify-between space-y-4">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-blue-500/20 text-blue-300" data-editable="true">Guion 02 • Educación B2C</span>
+                  <button onclick="copyScriptText(this)" class="no-print text-xs text-slate-300 hover:text-white">📋 Copiar</button>
+                </div>
+                <h4 class="font-display font-bold text-base text-white" data-editable="true">¿Cómo funciona tu crédito y la App?</h4>
+                <div class="text-xs text-slate-200 space-y-2 leading-relaxed" data-editable="true">
+                  <p><strong class="text-emerald-300">🎥 Toma:</strong> Asesor junto a un cliente en el punto de venta (sin enfocar un modelo de teléfono específico que caduque rápido).</p>
+                  <p><strong class="text-emerald-300">⚡ Gancho (0-3s):</strong> "¿Quieres cambiar tu teléfono a crédito y saber exactamente cuánto vas a pagar desde el día uno?"</p>
+                  <p><strong class="text-emerald-300">💡 Desarrollo (3-15s):</strong> "Con FlexPay la cuenta es clarita: pagas tu inicial en tienda, te llevas tu equipo y completas 7 cuotas fijas. Y cuando ya tienes tu contrato activo, descargas la App FlexPay para llevar el control total."</p>
+                  <p><strong class="text-emerald-300">🎯 Cierre / CTA:</strong> "Sin trabas bancarias. Visítanos en nuestras tiendas aliadas."</p>
+                </div>
+              </div>
+              <div class="pt-3 border-t border-white/10 text-[11px] text-slate-400 flex justify-between">
+                <span data-editable="true">Duración: 25 seg</span>
+                <span data-editable="true">Talento: Experto FlexPay</span>
+              </div>
+            </div>
+
+            <!-- Guion 3 -->
+            <div class="p-5 rounded-xl bg-white/5 border border-white/10 flex flex-col justify-between space-y-4">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300" data-editable="true">Guion 03 • Captación B2B</span>
+                  <button onclick="copyScriptText(this)" class="no-print text-xs text-slate-300 hover:text-white">📋 Copiar</button>
+                </div>
+                <h4 class="font-display font-bold text-base text-white" data-editable="true">Invitación a Comercios Aliados</h4>
+                <div class="text-xs text-slate-200 space-y-2 leading-relaxed" data-editable="true">
+                  <p><strong class="text-emerald-300">🎥 Toma:</strong> Líder comercial de FlexPay dentro de una tienda de telefonía aliada con buen movimiento.</p>
+                  <p><strong class="text-emerald-300">⚡ Gancho (0-3s):</strong> "Si tienes una tienda de telefonía en Venezuela, sabes cuántos clientes preguntan por pago en cuotas todos los días."</p>
+                  <p><strong class="text-emerald-300">💡 Desarrollo (3-15s):</strong> "Conviértete en Comercio Aliado de FlexPay. Nosotros ponemos la plataforma tecnológica, la gestión de cobranza y el respaldo para que tú multipliques tus ventas sin descapitalizarte."</p>
+                  <p><strong class="text-emerald-300">🎯 Cierre / CTA:</strong> "Escríbenos hoy y sumemos tu tienda a la red FlexPay."</p>
+                </div>
+              </div>
+              <div class="pt-3 border-t border-white/10 text-[11px] text-slate-400 flex justify-between">
+                <span data-editable="true">Duración: 25-30 seg</span>
+                <span data-editable="true">Talento: Comercial B2B</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN 7: APLICACIONES + SIMULADOR DE CUOTAS CLARAS
+           ========================================== -->
+      <section id="sec-7" class="brand-section bg-white rounded-2xl p-8 shadow-sm border border-slate-200/80 space-y-8">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--color-primary)]">07 • Estructura del Manual</span>
+          <h2 class="font-display text-2xl font-bold text-slate-900" data-editable="true">7. Aplicaciones Prácticas y Simulador de Transparencia Radical</h2>
+        </div>
+
+        <!-- NUEVO WIDGET INTERACTIVO: CALCULADORA VISUAL "INICIAL + 7 CUOTAS = TOTAL" -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-slate-50 to-blue-50/50 border border-blue-200/80 space-y-5">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-[var(--color-primary)]">Componente UI de Marca • Valor: Integridad Radical</span>
+              <h3 class="font-display text-xl font-bold text-slate-900" data-editable="true">Simulador Visual de Cuotas Claras (Sin Letra Pequeña)</h3>
+              <p class="text-xs text-slate-600" data-editable="true">Ejemplo interactivo de cómo debe mostrarse el desglose matemático en tiendas, web y piezas de redes sociales.</p>
+            </div>
+            <span class="text-xs font-mono bg-white px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 font-semibold">Fórmula: Inicial + 7 Cuotas = Total</span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            <!-- Controles del Simulador -->
+            <div class="lg:col-span-5 bg-white p-5 rounded-xl border border-slate-200 space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Valor Total del Equipo ($ USD Ref.)</label>
+                <input id="calc-total-input" type="number" value="200" min="50" max="1500" step="10" oninput="updateInstallmentSim()" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 font-display font-bold text-lg text-slate-900 focus:outline-none focus:border-[var(--color-primary)] tabular-nums" />
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                  <span>Porcentaje de Inicial en Tienda:</span>
+                  <span id="calc-init-pct-label" class="text-[var(--color-primary)] font-bold">30%</span>
+                </div>
+                <input id="calc-init-pct" type="range" min="15" max="50" step="5" value="30" oninput="updateInstallmentSim()" class="w-full accent-[var(--color-primary)] cursor-pointer" />
+              </div>
+              <p class="text-[11px] text-slate-500 leading-relaxed" data-editable="true">
+                *Este módulo sirve de plantilla visual para que los diseñadores y asesores presenten números siempre alineados con <code>tabular-nums</code> y ajustes de centavos explicados con claridad.
+              </p>
+            </div>
+
+            <!-- Tarjeta Visual Resultante (Estándar Gráfico FlexPay) -->
+            <div class="lg:col-span-7 bg-[#0A1931] text-white p-6 rounded-2xl shadow-md space-y-4">
+              <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded bg-[var(--color-primary)] flex items-center justify-center font-display font-bold text-xs">F</div>
+                  <span class="font-display font-bold text-sm" data-editable="true">Plan de Pago Transparente FlexPay</span>
+                </div>
+                <span class="text-[11px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full font-semibold" data-editable="true">0% Letra Pequeña</span>
+              </div>
+
+              <div class="grid grid-cols-3 gap-3 text-center py-2 tabular-nums">
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                  <span class="text-[11px] text-slate-300 block" data-editable="true">1. Inicial Hoy</span>
+                  <span id="sim-initial" class="font-display font-extrabold text-2xl md:text-3xl text-emerald-400">$60.00</span>
+                </div>
+                <div class="p-3 rounded-xl bg-white/10 border border-blue-400/40">
+                  <span class="text-[11px] text-blue-200 block" data-editable="true">2. Siete (7) Cuotas de</span>
+                  <span id="sim-quota" class="font-display font-extrabold text-2xl md:text-3xl text-white">$20.00</span>
+                </div>
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                  <span class="text-[11px] text-slate-300 block" data-editable="true">3. Total Exacto</span>
+                  <span id="sim-total" class="font-display font-extrabold text-2xl md:text-3xl text-slate-200">$200.00</span>
+                </div>
+              </div>
+
+              <p id="sim-copy-summary" class="text-xs text-center text-slate-300 bg-white/5 py-2 px-3 rounded-lg font-mono tabular-nums" data-editable="true">
+                Resumen claro: Pagas $60.00 de inicial en tienda + 7 cuotas de $20.00 = $200.00 total.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mockups de Punto de Contacto -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="rounded-2xl border border-slate-200 overflow-hidden bg-slate-900 text-white flex flex-col justify-between p-6 space-y-6 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-[var(--color-primary)] flex items-center justify-center font-display font-bold text-xs">F</div>
+                <span class="font-display font-bold text-sm">FlexPay</span>
+              </div>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-300 font-semibold" data-editable="true">Campaña B2C</span>
+            </div>
+            <div class="space-y-2 py-4">
+              <p class="text-xs uppercase tracking-widest text-emerald-400 font-bold" data-editable="true">Plan Nacional</p>
+              <h4 class="font-display text-2xl font-extrabold leading-tight" data-editable="true">"Venezuela, te estamos escuchando"</h4>
+              <p class="text-xs text-slate-300" data-editable="true">Mejoramos nuestras cuotas, nuestra app y nuestra atención en tienda para ti.</p>
+            </div>
+            <div class="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
+              <span data-editable="true">Formato Post / Reel Redes</span>
+              <span class="text-white font-semibold" data-editable="true">Sin letra pequeña →</span>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border-2 border-[var(--color-primary)] bg-white p-6 flex flex-col justify-between space-y-5 shadow-sm">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <span class="text-[11px] font-bold uppercase text-[var(--color-primary)]" data-editable="true">Tienda Aliada Oficial</span>
+              <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-600">POS-5S</span>
+            </div>
+            <div class="space-y-3 text-center py-2">
+              <div class="w-12 h-12 rounded-2xl bg-[var(--color-primary)] text-white font-display font-extrabold text-2xl flex items-center justify-center mx-auto shadow">F</div>
+              <h4 class="font-display font-extrabold text-xl text-slate-900" data-editable="true">¡Lleva tu teléfono hoy a crédito!</h4>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs font-mono tabular-nums text-slate-700" data-editable="true">
+                Inicial + 7 Cuotas Claras = Total
+              </div>
+            </div>
+            <div class="text-center text-[11px] text-slate-500 border-t border-slate-100 pt-3" data-editable="true">
+              ¿Ya tienes contrato activo? Gestiona tus pagos en la App FlexPay
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-gradient-to-b from-slate-50 to-white p-6 flex flex-col justify-between space-y-5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase px-2.5 py-1 rounded bg-blue-100 text-[var(--color-primary)]" data-editable="true">B2B • Aliados y SaaS</span>
+              <span class="text-xs text-slate-400 font-mono">LMS Core</span>
+            </div>
+            <div class="space-y-2">
+              <h4 class="font-display font-bold text-lg text-slate-900" data-editable="true">Multiplica las ventas de tu tienda de telefonía</h4>
+              <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">
+                Súmate como Comercio Aliado o utiliza nuestra plataforma tecnológica con gestión de cobranzas y apalancamiento de capital.
+              </p>
+            </div>
+            <div class="p-3 rounded-xl bg-[#0A1931] text-white text-xs flex items-center justify-between">
+              <span data-editable="true">Conviértete en Aliado FlexPay</span>
+              <span class="px-2 py-1 rounded bg-[var(--color-accent)] text-slate-950 font-bold">B2B</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECCIÓN 8: FASES DEL PROYECTO
+           ========================================== -->
+      <section id="sec-fases" class="brand-section bg-white rounded-2xl p-8 shadow-sm border border-slate-200/80 space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--color-primary)]">Bloque III • Hoja de Ruta</span>
+          <h2 class="font-display text-2xl font-bold text-slate-900" data-editable="true">Fases del Brand Management y Gobernanza</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-100 text-[var(--color-primary)]">FASE 01</span>
+            <h3 class="font-display font-bold text-base text-slate-900" data-editable="true">Inmersión y Diagnóstico</h3>
+            <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">
+              Investigación del mercado venezolano (Krece, Chollo, referente Cashea), análisis DAFO y definición del briefing B2B y B2C.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-100 text-[var(--color-primary)]">FASE 02</span>
+            <h3 class="font-display font-bold text-base text-slate-900" data-editable="true">Definición Estratégica</h3>
+            <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">
+              Ajuste de arquetipos, avatares B2B/B2C, propuesta de valor, eliminación de términos bancarios ("financiamiento") y territorio <em>"Estamos escuchando"</em>.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-100 text-[var(--color-primary)]">FASE 03</span>
+            <h3 class="font-display font-bold text-base text-slate-900" data-editable="true">Diseño de Identidad</h3>
+            <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">
+              Homologación del logo con la App, guía visual cromática, levantamiento de fotos/videos del equipo humano FlexPay y plantillas Meta Ads.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">FASE 04</span>
+            <h3 class="font-display font-bold text-base text-slate-900" data-editable="true">Normalización (5S)</h3>
+            <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">
+              Documentación en manual vivo (Web/PDF/Figma). Ordenamiento 5S digital en Drive/CRM con dueños de carpeta, control de cambios y versión vigente visible.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">FASE 05</span>
+            <h3 class="font-display font-bold text-base text-slate-900" data-editable="true">Auditoría y Revisión</h3>
+            <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">
+              Ciclo PDCA, Retro meeting corta los martes (Kaizen) con métricas claras y rutina semanal/mensual 5S en tiendas y canales digitales.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- LÓGICA INTERACTIVA (EDICIÓN, FRASES, GUIONES, CALCULADORA Y EXPORTACIÓN) -->
+  <script>
+    let isEditMode = false;
+    let isSlideMode = false;
+    let currentSlide = 0;
+    const STORAGE_KEY = 'flexpay_brandbook_saved_v2';
+
+    // Cargar estado guardado
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedHTML = localStorage.getItem(STORAGE_KEY);
+      if (savedHTML) {
+        document.getElementById('document-container').innerHTML = savedHTML;
+      }
+      document.getElementById('document-container').addEventListener('input', () => {
+        saveProgress();
+      });
+    });
+
+    function saveProgress() {
+      localStorage.setItem(STORAGE_KEY, document.getElementById('document-container').innerHTML);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = message;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 2400);
+    }
+
+    // Activar / Desactivar Modo Edición
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      document.body.classList.toggle('edit-mode', isEditMode);
+      applyEditableState();
+
+      const statusDot = document.getElementById('status-dot');
+      const statusText = document.getElementById('status-text');
+      const editBtnLabel = document.getElementById('edit-btn-label');
+
+      if (isEditMode) {
+        statusDot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+        statusText.textContent = 'Modo Edición Activo (Autoguardado)';
+        editBtnLabel.textContent = 'Finalizar Edición';
+        showToast('Modo Edición activado: haz clic en cualquier texto');
+      } else {
+        statusDot.className = 'w-2 h-2 rounded-full bg-slate-400';
+        statusText.textContent = 'Modo Lectura';
+        editBtnLabel.textContent = 'Activar Modo Edición';
+        saveProgress();
+      }
+    }
+
+    function applyEditableState() {
+      const editables = document.querySelectorAll('[data-editable="true"]');
+      editables.forEach(el => {
+        el.setAttribute('contenteditable', isEditMode ? 'true' : 'false');
+      });
+    }
+
+    // Filtrar tarjetas de frases por categoría
+    function filterCopy(category) {
+      const cards = document.querySelectorAll('.copy-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.dataset.cat === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Añadir nueva tarjeta de frase / sugerencia de contenido
+    function addNewCopyCard() {
+      const grid = document.getElementById('copy-bank-grid');
+      const newCard = document.createElement('div');
+      newCard.dataset.cat = 'escucha';
+      newCard.className = 'copy-card p-5 rounded-xl bg-white border-2 border-dashed border-blue-300 shadow-sm flex flex-col justify-between space-y-3';
+      newCard.innerHTML = `
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-blue-100 text-[var(--color-primary)]" data-editable="true">Nueva Sugerencia • Editar Categoría</span>
+            <button onclick="copyCardText(this)" class="no-print text-xs text-slate-400 hover:text-slate-700">📋 Copiar</button>
+          </div>
+          <p class="copy-quote font-display font-bold text-slate-900 text-base leading-snug" data-editable="true">
+            "Escribe aquí tu nueva frase clave o propuesta de titular para FlexPay..."
+          </p>
+          <p class="text-xs text-slate-600 leading-relaxed" data-editable="true">
+            <strong>Sugerencia de contenido:</strong> Describe aquí la idea visual (Reel, carrusel, foto en tienda o dinámica con aliados).
+          </p>
+        </div>
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+          <span data-editable="true">Formato: Editable</span>
+          <span data-editable="true">Objetivo: Definir</span>
+        </div>
+      `;
+      grid.prepend(newCard);
+      if (!isEditMode) toggleEditMode();
+      else applyEditableState();
+      saveProgress();
+      showToast('Nueva tarjeta de frase añadida');
+    }
+
+    // Añadir nuevo guion para el equipo humano
+    function addNewScriptCard() {
+      const grid = document.getElementById('scripts-grid');
+      const newScript = document.createElement('div');
+      newScript.className = 'p-5 rounded-xl bg-white/10 border border-emerald-400/40 flex flex-col justify-between space-y-4';
+      newScript.innerHTML = `
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300" data-editable="true">Nuevo Guion • Editable</span>
+            <button onclick="copyScriptText(this)" class="no-print text-xs text-slate-300 hover:text-white">📋 Copiar</button>
+          </div>
+          <h4 class="font-display font-bold text-base text-white" data-editable="true">Título del nuevo video para el equipo</h4>
+          <div class="text-xs text-slate-200 space-y-2 leading-relaxed" data-editable="true">
+            <p><strong class="text-emerald-300">🎥 Toma:</strong> Describe el encuadre en tienda o con el comercio aliado.</p>
+            <p><strong class="text-emerald-300">⚡ Gancho (0-3s):</strong> Escribe la primera frase para captar la atención.</p>
+            <p><strong class="text-emerald-300">💡 Desarrollo (3-15s):</strong> Explica el beneficio clave con lenguaje simple y cercano.</p>
+            <p><strong class="text-emerald-300">🎯 Cierre / CTA:</strong> Invitación clara a la tienda o a usar la App.</p>
+          </div>
+        </div>
+        <div class="pt-3 border-t border-white/10 text-[11px] text-slate-400 flex justify-between">
+          <span data-editable="true">Duración: 20-30 seg</span>
+          <span data-editable="true">Talento: Equipo FlexPay</span>
+        </div>
+      `;
+      grid.prepend(newScript);
+      if (!isEditMode) toggleEditMode();
+      else applyEditableState();
+      saveProgress();
+      showToast('Nuevo guion añadido');
+    }
+
+    // Copiar texto de tarjeta
+    function copyCardText(btn) {
+      const card = btn.closest('.copy-card');
+      const text = card.querySelector('.copy-quote').innerText;
+      navigator.clipboard.writeText(text);
+      showToast('Frase copiada al portapapeles');
+    }
+
+    function copyScriptText(btn) {
+      const card = btn.closest('div.p-5');
+      const text = card.innerText.replace('📋 Copiar', '').trim();
+      navigator.clipboard.writeText(text);
+      showToast('Guion copiado al portapapeles');
+    }
+
+    // Simulador de Cuotas Claras (Inicial + 7 Cuotas = Total)
+    function updateInstallmentSim() {
+      const total = parseFloat(document.getElementById('calc-total-input').value) || 0;
+      const pct = parseFloat(document.getElementById('calc-init-pct').value) || 30;
+      document.getElementById('calc-init-pct-label').textContent = `${pct}%`;
+
+      // Cálculo con ajuste de centavos transparente
+      const rawInitial = (total * (pct / 100));
+      const remaining = total - rawInitial;
+      const quota = Math.round((remaining / 7) * 100) / 100;
+      const exactInitial = Math.round((total - (quota * 7)) * 100) / 100;
+
+      document.getElementById('sim-initial').textContent = `$${exactInitial.toFixed(2)}`;
+      document.getElementById('sim-quota').textContent = `$${quota.toFixed(2)}`;
+      document.getElementById('sim-total').textContent = `$${total.toFixed(2)}`;
+      document.getElementById('sim-copy-summary').textContent =
+        `Resumen claro: Pagas $${exactInitial.toFixed(2)} de inicial en tienda + 7 cuotas de $${quota.toFixed(2)} = $${total.toFixed(2)} total.`;
+    }
+
+    // Cambiar colores de marca en tiempo real
+    function updateBrandColor(cssVar, hexValue, hexLabelId, rgbLabelId) {
+      document.documentElement.style.setProperty(cssVar, hexValue);
+      const hexLabel = document.getElementById(hexLabelId);
+      const rgbLabel = document.getElementById(rgbLabelId);
+      if (hexLabel) hexLabel.textContent = hexValue.toUpperCase();
+      if (rgbLabel) rgbLabel.textContent = hexToRgbString(hexValue);
+      saveProgress();
+    }
+
+    function hexToRgbString(hex) {
+      const cleanHex = hex.replace('#', '');
+      const r = parseInt(cleanHex.substring(0, 2), 16);
+      const g = parseInt(cleanHex.substring(2, 4), 16);
+      const b = parseInt(cleanHex.substring(4, 6), 16);
+      return `${r}, ${g}, ${b}`;
+    }
+
+    // Alternar Vista Presentación (Slides)
+    function toggleSlideMode() {
+      isSlideMode = !isSlideMode;
+      document.body.classList.toggle('slide-mode', isSlideMode);
+      const slideControls = document.getElementById('slide-controls');
+      const viewModeLabel = document.getElementById('view-mode-label');
+
+      if (isSlideMode) {
+        slideControls.classList.remove('hidden');
+        slideControls.classList.add('flex');
+        viewModeLabel.textContent = 'Vista Web Completa (Scroll)';
+        showSlide(currentSlide);
+      } else {
+        slideControls.classList.add('hidden');
+        slideControls.classList.remove('flex');
+        viewModeLabel.textContent = 'Vista Presentación (Slides)';
+      }
+    }
+
+    function showSlide(index) {
+      const allSections = document.querySelectorAll('.brand-section');
+      if (index < 0) index = 0;
+      if (index >= allSections.length) index = allSections.length - 1;
+      currentSlide = index;
+
+      allSections.forEach((sec, idx) => {
+        sec.classList.toggle('active-slide', idx === currentSlide);
+      });
+
+      document.getElementById('slide-indicator').textContent = `Diapositiva ${currentSlide + 1} / ${allSections.length}`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function changeSlide(delta) {
+      showSlide(currentSlide + delta);
+    }
+
+    function goToSection(index) {
+      if (isSlideMode) {
+        showSlide(index);
+      }
+    }
+
+    // Descargar el archivo HTML con todos los cambios hechos
+    function downloadUpdatedHTML() {
+      const editables = document.querySelectorAll('[data-editable="true"]');
+      editables.forEach(el => el.removeAttribute('contenteditable'));
+      document.body.classList.remove('edit-mode');
+
+      const fullHTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([fullHTML], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'flexpay-brand-management-v2.html';
+      a.click();
+      URL.revokeObjectURL(url);
+
+      if (isEditMode) {
+        document.body.classList.add('edit-mode');
+        applyEditableState();
+      }
+      showToast('Archivo HTML descargado con tus cambios');
+    }
+
+    function resetSavedData() {
+      if (confirm('¿Deseas restaurar el contenido original del manual? Se borrarán las ediciones locales guardadas en el navegador.')) {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+      }
+    }
+  </script>
+</body>
+</html>
